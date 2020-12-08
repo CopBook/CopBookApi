@@ -1,32 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\CopBookApi\\CopBookApi\\CopBookApi.csproj": {}
+    "/Users/Josiah/dev/CopBookApi/CopBookApi/CopBookApi.csproj": {}
   },
   "projects": {
-    "C:\\code\\CopBookApi\\CopBookApi\\CopBookApi.csproj": {
+    "/Users/Josiah/dev/CopBookApi/CopBookApi/CopBookApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\CopBookApi\\CopBookApi\\CopBookApi.csproj",
+        "projectUniqueName": "/Users/Josiah/dev/CopBookApi/CopBookApi/CopBookApi.csproj",
         "projectName": "CopBookApi",
-        "projectPath": "C:\\code\\CopBookApi\\CopBookApi\\CopBookApi.csproj",
-        "packagesPath": "C:\\Users\\nater\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\CopBookApi\\CopBookApi\\obj\\",
+        "projectPath": "/Users/Josiah/dev/CopBookApi/CopBookApi/CopBookApi.csproj",
+        "packagesPath": "/Users/Josiah/.nuget/packages/",
+        "outputPath": "/Users/Josiah/dev/CopBookApi/CopBookApi/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\nater\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/Josiah/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,14 +41,6 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
-            "FirebaseAdmin": {
-              "target": "Package",
-              "version": "[2.0.0, )"
-            },
-            "FirebaseAuthentication.net": {
-              "target": "Package",
-              "version": "[3.4.0, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[5.0.0, )",
@@ -66,6 +54,10 @@
               "noWarn": [
                 "NU1605"
               ]
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -90,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }

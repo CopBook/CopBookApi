@@ -1,44 +1,59 @@
 ﻿using CopBookApi.Interfaces.Api.Auth;
-using CopBookApi.Interfaces.Controllers;
-using FirebaseAdmin.Auth;
+using CopBookApi.Interfaces.Services.Auth;
+using CopBookApi.Models.Api.Auth;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace CopBookApi.Controllers
-{   
+{
     [ApiController]
-    [Route("api")]
-    public class AuthController : ControllerBase
+    [Route("[controller]/[action]")]
+    public class AuthController : Controller
     {
+        private readonly IAuthenticationService auth;
+
+        public AuthController(IAuthenticationService auth)
+        {
+            this.auth = auth;
+        }
 
         [HttpPost]
         public IAuthResponse RefreshToken()
         {
-            return null;
+            throw new NotImplementedException();
         }
 
+        [HttpPost]
         public void SendPasswordResetEmail()
         {
             throw new NotImplementedException();
         }
 
-        [HttpPost("sign-in")]
-        async public Task<IActionResult> SignIn()
+        [HttpPost]
+        public IAuthResponse SignIn(ISignInRequest request)
         {
-
-            UserRecord userRecord = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync("nater20k@gmail.com");
-
-            var user = await FirebaseAuth.DefaultInstance.CreateCustomTokenAsync(userRecord.Uid);
-            // See the UserRecord reference doc for the contents of userRecord.
-            Console.WriteLine($"Successfully fetched user data: {userRecord.Uid}");
-            return Ok(user);
+            throw new NotImplementedException();
         }
 
         [HttpPost]
-        public IAuthResponse SignUp(ISignUpRequest signUp)
+        public async Task<dynamic> SignUp(SignUpRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await auth.SignUp(request);
+            }
+            catch (Exception e)
+            {
+                if (e is AuthFailedException exception)
+                {
+                    return StatusCode(exception.ResponseCode);
+                }
+                else
+                {
+                    return StatusCode(500);
+                }
+            }
         }
     }
 }

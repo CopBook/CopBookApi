@@ -1,32 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\CopBookApi\\CopBookApi.Tests\\CopBookApi.Tests.csproj": {}
+    "/Users/Josiah/dev/CopBookApi/CopBookApi.Tests/CopBookApi.Tests.csproj": {}
   },
   "projects": {
-    "C:\\code\\CopBookApi\\CopBookApi.Tests\\CopBookApi.Tests.csproj": {
+    "/Users/Josiah/dev/CopBookApi/CopBookApi.Tests/CopBookApi.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\CopBookApi\\CopBookApi.Tests\\CopBookApi.Tests.csproj",
+        "projectUniqueName": "/Users/Josiah/dev/CopBookApi/CopBookApi.Tests/CopBookApi.Tests.csproj",
         "projectName": "CopBookApi.Tests",
-        "projectPath": "C:\\code\\CopBookApi\\CopBookApi.Tests\\CopBookApi.Tests.csproj",
-        "packagesPath": "C:\\Users\\nater\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\CopBookApi\\CopBookApi.Tests\\obj\\",
+        "projectPath": "/Users/Josiah/dev/CopBookApi/CopBookApi.Tests/CopBookApi.Tests.csproj",
+        "packagesPath": "/Users/Josiah/.nuget/packages/",
+        "outputPath": "/Users/Josiah/dev/CopBookApi/CopBookApi.Tests/obj/",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\nater\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/Josiah/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -76,12 +72,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.8, 3.1.8]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }
