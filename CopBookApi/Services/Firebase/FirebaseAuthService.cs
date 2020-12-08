@@ -27,44 +27,14 @@ namespace CopBookApi.Services.Firebase
         {
             string endpoint = "accounts:signInWithPassword";
             var response = await SendRequest(endpoint, request);
-
-            if (response is object && response.StatusCode == HttpStatusCode.OK)
-            {
-                string bodyAsString = await response.Content.ReadAsStringAsync();
-                var parsedResponse = JSON.Parse<FirebaseSignInResponse>(bodyAsString);
-                return new AuthResponse
-                {
-                    ExpiresIn = parsedResponse.ExpiresIn,
-                    IdToken = parsedResponse.IdToken,
-                    RefreshToken = parsedResponse.RefreshToken
-                };
-            }
-            else
-            {
-                throw new AuthFailedException("Sign In Failed. Please double check the request", response.StatusCode);
-            }
+            return await ProcessApiResponse(response);
         }
 
         public async Task<AuthResponse> SignUp(SignUpRequest request)
         {
             string endpoint = "accounts:signUp";
             var response = await SendRequest(endpoint, request);
-
-            if (response is object && response.StatusCode == HttpStatusCode.OK)
-            {
-                string bodyAsString = await response.Content.ReadAsStringAsync();
-                FirebaseSignUpResponse parsedResponse = JSON.Parse<FirebaseSignUpResponse>(bodyAsString);
-                return new AuthResponse
-                {
-                    ExpiresIn = parsedResponse.ExpiresIn,
-                    IdToken = parsedResponse.IdToken,
-                    RefreshToken = parsedResponse.RefreshToken
-                };
-            }
-            else
-            {
-                throw new AuthFailedException("Sign Up Failed. Please double check the request.", response.StatusCode);
-            }
+            return await ProcessApiResponse(response);
         }
 
         private async Task<HttpResponseMessage> SendRequest(string endpoint, dynamic body)
@@ -90,6 +60,20 @@ namespace CopBookApi.Services.Firebase
                 return null;
             }
 
+        }
+
+        private async Task<AuthResponse> ProcessApiResponse(HttpResponseMessage response)
+        {
+            if (response is object && response.StatusCode == HttpStatusCode.OK)
+            {
+                string bodyAsString = await response.Content.ReadAsStringAsync();
+                var parsedResponse = JSON.Parse<FirebaseAuthBaseResponse>(bodyAsString);
+                return new AuthResponse(parsedResponse);
+            }
+            else
+            {
+                throw new AuthFailedException("Sign Up Failed. Please double check the request.", response.StatusCode);
+            }
         }
     }
 }

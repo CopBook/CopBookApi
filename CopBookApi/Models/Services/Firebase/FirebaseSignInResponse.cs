@@ -1,5 +1,4 @@
-﻿using System;
-namespace CopBookApi.Models.Services.Firebase
+﻿namespace CopBookApi.Models.Services.Firebase
 {
     public class FirebaseSignInResponse : FirebaseSignUpResponse
     {
