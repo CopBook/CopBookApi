@@ -1,5 +1,4 @@
-﻿using CopBookApi.Interfaces.Api.Auth;
-using CopBookApi.Interfaces.Services.Auth;
+﻿using CopBookApi.Interfaces.Services.Auth;
 using CopBookApi.Models.Api.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -54,9 +53,9 @@ namespace CopBookApi.Controllers
         }
 
         [HttpPost]
-        public void SendPasswordResetEmail()
+        public async Task<IActionResult> SendPasswordResetEmail(PasswordResetEmailRequest request)
         {
-            throw new NotImplementedException();
+            return await auth.SendPasswordResetEmail(request) ? new OkResult() : new StatusCodeResult(500);
         }
 
         [HttpPost]
@@ -96,12 +95,12 @@ namespace CopBookApi.Controllers
                     case (int)HttpStatusCode.BadRequest:
                         return new BadRequestObjectResult(new { exception.ErrorMessage });
                     default:
-                        return StatusCode(exception.ResponseCode);
+                        return new StatusCodeResult(exception.ResponseCode);
                 }
             }
             else
             {
-                return StatusCode(500);
+                return new StatusCodeResult(500);
             }
         }
     }

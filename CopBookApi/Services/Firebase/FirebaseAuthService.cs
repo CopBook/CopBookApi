@@ -35,12 +35,17 @@ namespace CopBookApi.Services.Firebase
             string endpoint = "accounts:signUp";
             var httpResponse = await SendRequest(endpoint, request);
             var parsedRes = await ProcessApiResponse(httpResponse);
-            return await UpdateProfile(new UpdateProfileRequest
+            var finalResponse = await UpdateProfile(new UpdateProfileRequest
             {
                 DisplayName = request.Name,
                 IdToken = parsedRes.IdToken,
                 RefreshToken = parsedRes.RefreshToken
             });
+            await SendAccountVerificationEmail(new AccountVerificationEmailRequest
+            {
+                IdToken = finalResponse.IdToken
+            });
+            return finalResponse;
         }
 
         public async Task<AuthResponse> UpdateProfile(UpdateProfileRequest request)
@@ -60,6 +65,38 @@ namespace CopBookApi.Services.Firebase
             var httpResponse = await SendRequest(endpoint, request);
             var parsedRes = await ProcessApiResponse(httpResponse, true);
             return parsedRes;
+        }
+
+        public async Task<bool> SendAccountVerificationEmail(AccountVerificationEmailRequest request)
+        {
+            string endpoint = "accounts:sendOobCode";
+            var httpResponse = await SendRequest(endpoint, request);
+            try
+            {
+                await ProcessApiResponse(httpResponse);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public async Task<bool> SendPasswordResetEmail(PasswordResetEmailRequest request)
+        {
+            string endpoint = "accounts:sendOobCode";
+            var httpResponse = await SendRequest(endpoint, request);
+            try
+            {
+                await ProcessApiResponse(httpResponse);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message);
+                return false;
+            }
         }
 
         private async Task<HttpResponseMessage> SendRequest(string endpoint, dynamic body)
