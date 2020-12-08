@@ -6,5 +6,6 @@ namespace CopBookApi.Interfaces.Services.Auth
     public interface IAuthenticationService
     {
         public Task<AuthResponse> SignUp(SignUpRequest request);
+        public Task<AuthResponse> SignIn(SignInRequest request);
     }
 }

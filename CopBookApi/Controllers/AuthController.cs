@@ -31,9 +31,16 @@ namespace CopBookApi.Controllers
         }
 
         [HttpPost]
-        public IAuthResponse SignIn(ISignInRequest request)
+        public async Task<dynamic> SignIn(SignInRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await auth.SignIn(request);
+            }
+            catch (Exception e)
+            {
+                return HandleAuthException(e);
+            }
         }
 
         [HttpPost]
@@ -45,14 +52,19 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                if (e is AuthFailedException exception)
-                {
-                    return StatusCode(exception.ResponseCode);
-                }
-                else
-                {
-                    return StatusCode(500);
-                }
+                return HandleAuthException(e);
+            }
+        }
+
+        private StatusCodeResult HandleAuthException(Exception e)
+        {
+            if (e is AuthFailedException exception)
+            {
+                return StatusCode(exception.ResponseCode);
+            }
+            else
+            {
+                return StatusCode(500);
             }
         }
     }

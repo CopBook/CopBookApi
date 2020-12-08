@@ -23,10 +23,32 @@ namespace CopBookApi.Services.Firebase
             apiKeyQueryParam = "?key=" + settings.ApiKey;
         }
 
+        public async Task<AuthResponse> SignIn(SignInRequest request)
+        {
+            string endpoint = "accounts:signInWithPassword";
+            var response = await SendRequest(endpoint, request);
+
+            if (response is object && response.StatusCode == HttpStatusCode.OK)
+            {
+                string bodyAsString = await response.Content.ReadAsStringAsync();
+                var parsedResponse = JSON.Parse<FirebaseSignInResponse>(bodyAsString);
+                return new AuthResponse
+                {
+                    ExpiresIn = parsedResponse.ExpiresIn,
+                    IdToken = parsedResponse.IdToken,
+                    RefreshToken = parsedResponse.RefreshToken
+                };
+            }
+            else
+            {
+                throw new AuthFailedException("Sign In Failed. Please double check the request", response.StatusCode);
+            }
+        }
+
         public async Task<AuthResponse> SignUp(SignUpRequest request)
         {
             string endpoint = "accounts:signUp";
-            HttpResponseMessage response = await SendRequest(endpoint, request);
+            var response = await SendRequest(endpoint, request);
 
             if (response is object && response.StatusCode == HttpStatusCode.OK)
             {
@@ -41,7 +63,7 @@ namespace CopBookApi.Services.Firebase
             }
             else
             {
-                throw new AuthFailedException("Authentication Failed. Please double check the request.", response.StatusCode);
+                throw new AuthFailedException("Sign Up Failed. Please double check the request.", response.StatusCode);
             }
         }
 
