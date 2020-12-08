@@ -1,7 +1,0 @@
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.csprojAssemblyReference.cache
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.GeneratedMSBuildEditorConfig.editorconfig
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.AssemblyInfoInputs.cache
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.AssemblyInfo.cs
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.csproj.CoreCompileInputs.cache
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.MvcApplicationPartsAssemblyInfo.cs
-C:\code\CopBookApi\CopBookApi\obj\Debug\net5.0\CopBookApi.MvcApplicationPartsAssemblyInfo.cache
