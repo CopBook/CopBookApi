@@ -33,8 +33,33 @@ namespace CopBookApi.Services.Firebase
         public async Task<AuthResponse> SignUp(SignUpRequest request)
         {
             string endpoint = "accounts:signUp";
-            var response = await SendRequest(endpoint, request);
-            return await ProcessApiResponse(response);
+            var httpResponse = await SendRequest(endpoint, request);
+            var parsedRes = await ProcessApiResponse(httpResponse);
+            return await UpdateProfile(new UpdateProfileRequest
+            {
+                DisplayName = request.Name,
+                IdToken = parsedRes.IdToken,
+                RefreshToken = parsedRes.RefreshToken
+            });
+        }
+
+        public async Task<AuthResponse> UpdateProfile(UpdateProfileRequest request)
+        {
+            string endpoint = "accounts:update";
+            var httpResponse = await SendRequest(endpoint, request);
+            _ = await ProcessApiResponse(httpResponse);
+            return await RefreshToken(new RefreshTokenRequest
+            {
+                RefreshToken = request.RefreshToken
+            });
+        }
+
+        public async Task<AuthResponse> RefreshToken(RefreshTokenRequest request)
+        {
+            string endpoint = "token";
+            var httpResponse = await SendRequest(endpoint, request);
+            var parsedRes = await ProcessApiResponse(httpResponse, true);
+            return parsedRes;
         }
 
         private async Task<HttpResponseMessage> SendRequest(string endpoint, dynamic body)
@@ -62,13 +87,22 @@ namespace CopBookApi.Services.Firebase
 
         }
 
-        private async Task<AuthResponse> ProcessApiResponse(HttpResponseMessage response)
+        private async Task<AuthResponse> ProcessApiResponse(HttpResponseMessage response, bool isRefreshTokenResponse = false)
         {
             if (response is object && response.StatusCode == HttpStatusCode.OK)
             {
                 string bodyAsString = await response.Content.ReadAsStringAsync();
-                var parsedResponse = JSON.Parse<FirebaseAuthBaseResponse>(bodyAsString);
-                return new AuthResponse(parsedResponse);
+
+                if (isRefreshTokenResponse)
+                {
+                    var parsedResponse = JSON.Parse<FirebaseRefreshTokenResponse>(bodyAsString);
+                    return new AuthResponse(parsedResponse);
+                }
+                else
+                {
+                    var parsedResponse = JSON.Parse<FirebaseAuthBaseResponse>(bodyAsString);
+                    return new AuthResponse(parsedResponse);
+                }
             }
             else
             {
