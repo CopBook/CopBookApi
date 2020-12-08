@@ -1,8 +1,9 @@
-﻿using CopBookApi.Interfaces.Api.Auth;
-using CopBookApi.Interfaces.Services.Auth;
+﻿using CopBookApi.Interfaces.Services.Auth;
 using CopBookApi.Models.Api.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CopBookApi.Controllers
@@ -19,21 +20,55 @@ namespace CopBookApi.Controllers
         }
 
         [HttpPost]
-        public IAuthResponse RefreshToken()
+        public async Task<dynamic> RefreshToken(RefreshTokenRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await auth.RefreshToken(request);
+            }
+            catch (Exception e)
+            {
+                return HandleAuthException(e);
+            }
         }
 
         [HttpPost]
-        public void SendPasswordResetEmail()
+        public async Task<dynamic> UpdateProfile(UpdateProfileRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                StringValues idTokenFromHeader;
+                bool hasAuthHeader = HttpContext.Request.Headers.TryGetValue("Authorization", out idTokenFromHeader);
+                if (!hasAuthHeader) // TODO: Refactor this to a shared Authorization scheme once implemented
+                {
+                    throw new AuthFailedException("Id Token is required for this call", HttpStatusCode.Forbidden);
+                }
+                request.IdToken = idTokenFromHeader.ToString().Split(' ')[1];
+                return await auth.UpdateProfile(request);
+            }
+            catch (Exception e)
+            {
+                return HandleAuthException(e);
+            }
         }
 
         [HttpPost]
-        public IAuthResponse SignIn(ISignInRequest request)
+        public async Task<IActionResult> SendPasswordResetEmail(PasswordResetEmailRequest request)
         {
-            throw new NotImplementedException();
+            return await auth.SendPasswordResetEmail(request) ? new OkResult() : new StatusCodeResult(500);
+        }
+
+        [HttpPost]
+        public async Task<dynamic> SignIn(SignInRequest request)
+        {
+            try
+            {
+                return await auth.SignIn(request);
+            }
+            catch (Exception e)
+            {
+                return HandleAuthException(e);
+            }
         }
 
         [HttpPost]
@@ -45,14 +80,27 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                if (e is AuthFailedException exception)
+                return HandleAuthException(e);
+            }
+        }
+
+        private IActionResult HandleAuthException(Exception e)
+        {
+            if (e is AuthFailedException exception)
+            {
+                switch (exception.ResponseCode)
                 {
-                    return StatusCode(exception.ResponseCode);
+                    case (int)HttpStatusCode.Forbidden:
+                        return new UnauthorizedObjectResult(new { exception.ErrorMessage });
+                    case (int)HttpStatusCode.BadRequest:
+                        return new BadRequestObjectResult(new { exception.ErrorMessage });
+                    default:
+                        return new StatusCodeResult(exception.ResponseCode);
                 }
-                else
-                {
-                    return StatusCode(500);
-                }
+            }
+            else
+            {
+                return new StatusCodeResult(500);
             }
         }
     }
