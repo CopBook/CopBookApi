@@ -4,16 +4,12 @@ namespace CopBookApi.Models.Api.Auth
 {
     public class AuthResponse : IAuthResponse
     {
-        public AuthResponse()
-        {
-
-        }
 
         // in the constructor
-        public string IdToken => "IdTokenPlaceholder";
+        public string IdToken { get; set; }
 
-        public string RefreshToken => "RefreshTokenPlaceholder";
+        public string RefreshToken { get; set; }
 
-        public string ExpiresIn => "ExpiresInPlaceholder";
+        public string ExpiresIn { get; set; }
     }
 }
