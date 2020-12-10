@@ -1,6 +1,8 @@
 ﻿using CopBookApi.Interfaces.Services.Auth;
+using CopBookApi.Interfaces.Services.Logging;
 using CopBookApi.Models.Api.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Net;
@@ -13,10 +15,12 @@ namespace CopBookApi.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthenticationService auth;
+        private readonly ILoggingService logger;
 
-        public AuthController(IAuthenticationService auth)
+        public AuthController(IAuthenticationService auth, ILoggingService logger)
         {
             this.auth = auth;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -28,7 +32,7 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                return HandleAuthException(e);
+                return HandleAuthException(e, "/auth/refreshtoken");
             }
         }
 
@@ -48,7 +52,7 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                return HandleAuthException(e);
+                return HandleAuthException(e, "/auth/updateprofile");
             }
         }
 
@@ -67,7 +71,7 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                return HandleAuthException(e);
+                return HandleAuthException(e, "/auth/signin");
             }
         }
 
@@ -80,12 +84,13 @@ namespace CopBookApi.Controllers
             }
             catch (Exception e)
             {
-                return HandleAuthException(e);
+                return HandleAuthException(e, "/auth/signup");
             }
         }
 
-        private IActionResult HandleAuthException(Exception e)
+        private IActionResult HandleAuthException(Exception e, string endpoint)
         {
+            logger.Log(LogLevel.Error, endpoint, e);
             if (e is AuthFailedException exception)
             {
                 switch (exception.ResponseCode)
