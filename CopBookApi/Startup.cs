@@ -1,6 +1,9 @@
 using CopBookApi.Interfaces.Services.Auth;
+using CopBookApi.Interfaces.Services.Logging;
 using CopBookApi.Models.Services.Firebase;
+using CopBookApi.Models.Services.Sidelog;
 using CopBookApi.Services.Firebase;
+using CopBookApi.Services.Sidelog;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +41,13 @@ namespace CopBookApi
                 sp.GetRequiredService<IOptions<FirebaseSettings>>().Value);
 
             services.AddSingleton<IAuthenticationService, FirebaseAuthService>();
+
+            services.Configure<SidelogServiceConfig>(
+                Configuration.GetSection(nameof(SidelogServiceConfig)));
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<SidelogServiceConfig>>().Value);
+
+            services.AddSingleton<ILoggingService, SidelogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
