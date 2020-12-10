@@ -1,6 +1,7 @@
 ﻿using CopBookApi.Interfaces.Services.Auth;
 using CopBookApi.Interfaces.Services.Logging;
 using CopBookApi.Models.Api.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
@@ -37,16 +38,13 @@ namespace CopBookApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<dynamic> UpdateProfile(UpdateProfileRequest request)
         {
             try
             {
                 StringValues idTokenFromHeader;
                 bool hasAuthHeader = HttpContext.Request.Headers.TryGetValue("Authorization", out idTokenFromHeader);
-                if (!hasAuthHeader) // TODO: Refactor this to a shared Authorization scheme once implemented
-                {
-                    throw new AuthFailedException("Id Token is required for this call", HttpStatusCode.Forbidden);
-                }
                 request.IdToken = idTokenFromHeader.ToString().Split(' ')[1];
                 return await auth.UpdateProfile(request);
             }
@@ -86,6 +84,12 @@ namespace CopBookApi.Controllers
             {
                 return HandleAuthException(e, "/auth/signup");
             }
+        }
+
+        [HttpGet]
+        public IActionResult Test()
+        {
+            throw new Exception();
         }
 
         private IActionResult HandleAuthException(Exception e, string endpoint)

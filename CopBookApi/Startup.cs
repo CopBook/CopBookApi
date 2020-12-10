@@ -1,15 +1,18 @@
+using CopBookApi.Filters.Logging;
 using CopBookApi.Interfaces.Services.Auth;
 using CopBookApi.Interfaces.Services.Logging;
 using CopBookApi.Models.Services.Firebase;
 using CopBookApi.Models.Services.Sidelog;
 using CopBookApi.Services.Firebase;
 using CopBookApi.Services.Sidelog;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CopBookApi
@@ -26,8 +29,26 @@ namespace CopBookApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://securetoken.google.com/copbook";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = "https://securetoken.google.com/copbook",
+                        ValidateAudience = true,
+                        ValidAudience = "copbook",
+                        ValidateLifetime = true
+                    };
+                });
+        
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<LoggingActionFilter>();
+            });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CopBookApi", Version = "v1" });
@@ -63,6 +84,8 @@ namespace CopBookApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
