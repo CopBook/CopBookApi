@@ -48,13 +48,14 @@ namespace CopBookApi
             {
                 options.Filters.Add<LoggingActionFilter>();
             });
-            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CopBookApi", Version = "v1" });
             });
 
             services.AddHttpClient();
+            services.AddHttpContextAccessor();
 
             services.Configure<FirebaseSettings>(
                 Configuration.GetSection(nameof(FirebaseSettings)));

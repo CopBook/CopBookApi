@@ -1,5 +1,4 @@
 using CopBookApi.Interfaces.Services.Logging;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
@@ -31,9 +30,7 @@ namespace CopBookApi.Filters.Logging
         {
             string verb = context.HttpContext.Request.Method;
             string endpoint = context.HttpContext.Request.Path;
-            string userId = context.HttpContext.User?.FindFirst("user_id")?.Value;
-            string formattedUserId = userId != null ? $" - {userId}" : "";
-            return $"{verb} {endpoint}{formattedUserId}";
+            return $"{verb} {endpoint}";
         }
     }
 }
