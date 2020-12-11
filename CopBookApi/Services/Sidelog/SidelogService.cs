@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using CopBookApi.Interfaces.Services.Logging;
 using CopBookApi.Models.Services.Sidelog;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace CopBookApi.Services.Sidelog
@@ -11,11 +12,13 @@ namespace CopBookApi.Services.Sidelog
     public class SidelogService : ILoggingService
     {
         private readonly SidelogServiceConfig config;
+        private readonly IHttpContextAccessor contextAccessor;
         private HttpClient http;
         private Dictionary<LogLevel, string> ApiLogLevelNames;
-        public SidelogService(SidelogServiceConfig config, IHttpClientFactory httpFactory)
+        public SidelogService(SidelogServiceConfig config, IHttpClientFactory httpFactory, IHttpContextAccessor contextAccessor)
         {
             this.config = config;
+            this.contextAccessor = contextAccessor;
             http = httpFactory.CreateClient();
             ApiLogLevelNames = new Dictionary<LogLevel, string>();
             ApiLogLevelNames.Add(LogLevel.Trace, "trace");
@@ -33,7 +36,8 @@ namespace CopBookApi.Services.Sidelog
                 SendLog(new SidelogHttpRequest(
                     ApiLogLevelNames.GetValueOrDefault(level),
                     message,
-                    logObject
+                    logObject,
+                    contextAccessor.HttpContext
                 ));
             }
         }
