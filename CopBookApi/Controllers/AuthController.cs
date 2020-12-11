@@ -86,12 +86,6 @@ namespace CopBookApi.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult Test()
-        {
-            throw new Exception();
-        }
-
         private IActionResult HandleAuthException(Exception e, string endpoint)
         {
             logger.Log(LogLevel.Error, endpoint, e);
