@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 
 namespace CopBookApi
 {
@@ -43,6 +44,12 @@ namespace CopBookApi
                         ValidateLifetime = true
                     };
                 });
+
+            services.AddSingleton<IMongoClient, MongoClient>(s =>
+            {
+                string uri = s.GetRequiredService<IConfiguration>()["MongoUrl"];
+                return new MongoClient(uri);
+            });
         
             services.AddControllers(options =>
             {
