@@ -1,13 +1,9 @@
-﻿using CopBookApi.Interfaces.Api.Cop;
-using CopBookApi.Interfaces.Controllers;
-using CopBookApi.Models.Api;
-using CopBookApi.Services;
+﻿using CopBookApi.Models.Api;
 using CopBookApi.Services.DTO;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CopBookApi.Controllers
